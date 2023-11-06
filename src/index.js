@@ -1,7 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/app/App';
+import { MarvelService } from './services/MarvelService';
 import './style/style.scss';
+
+const marvelService = new MarvelService() //in order to work with the JS class, we create an instance
+
+marvelService.getAllCharacters().then(res => res.data.results.forEach(item => {
+  console.log(item.name);
+}))
 
 ReactDOM.render(
   <React.StrictMode>
