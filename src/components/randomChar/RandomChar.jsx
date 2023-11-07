@@ -9,33 +9,26 @@ class RandomChar extends Component {
     this.updateChar();
   }
   state = {
-    name: null,
-    description: null,
-    thumbnail: null,
-    homepage: null,
-    wiki: null,
+    char: {},
+    //the state may then contain some other data, not only this: { name: null, description: null, thumbnail: null, homepage: null, wiki: null}.  That's why, I put all this data into a separate Object that will characterize the character
   };
 
   marvelService = new MarvelService(); //in order to work with the JS class, we create an instance
 
-  updateChar = () => {
-    const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
-    this.marvelService.getCharacter(id).then((res) => {
-      this.setState({
-        name: res.data.results[0].name,
-        description: res.data.results[0].description,
-        thumbnail:
-          res.data.results[0].thumbnail.path +
-          "." +
-          res.data.results[0].thumbnail.extension, //This is how we create a single path to our image
-        homepage: res.data.results[0].urls[0].url, //here I get the first object and it has URL properties
-        wiki: res.data.results[0].urls[1].url,
-      });
-    }); //Now after that, it is necessary to call the updateChar method, so I will call it in the constructor in a moment.
+  onCharLoaded = (char) => {
+    this.setState({ char }); // same as ({char : char})
   };
 
+  updateChar = () => {
+    const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+    this.marvelService.getCharacter(id).then(this.onCharLoaded); //the argument that came from this .then() function will be written to char: onCharLoaded = (char) here
+  };
+  //Now after that, it is necessary to call the updateChar method, so I will call it in the constructor in a moment.
+
   render() {
-    const { name, description, thumbnail, homepage, wiki } = this.state;
+    const {
+      char: { name, description, thumbnail, homepage, wiki },
+    } = this.state; //since these states are already inside the 'char' object, we’ll just do this kind of destructuring
 
     return (
       <div className="randomchar">
