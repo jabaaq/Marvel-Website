@@ -33,7 +33,10 @@ class MarvelService {
     //Now the 'char' is res.data.results[0]
     return {
       name: char.name,
-      description: char.description,
+      description:
+        char.description.length !== 0
+          ? char.description.slice(0, 120) + "..."
+          : "Description not found",
       thumbnail: char.thumbnail.path + "." + char.thumbnail.extension, //This is how we create a single path to our image
       homepage: char.urls[0].url, //here I get the first object and it has URL properties
       wiki: char.urls[1].url,
