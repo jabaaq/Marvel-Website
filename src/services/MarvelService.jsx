@@ -5,7 +5,6 @@ class MarvelService {
 
   getResource = async (url) => {
     let res = await fetch(url);
-
     if (!res.ok) {
       throw new Error(`Couldn't fetch ${url}, status: ${res.status} `);
     }
@@ -16,6 +15,7 @@ class MarvelService {
     const res = await this.getResource(
       `${this._apiBase}characters?limit=9&offset=210&${this._apiKey}`
     );
+
     return res.data.results.map(this._transformCharacter);
     // return this.getResource(
     //   `${this._apiBase}characters?limit=9&offset=210&${this._apiKey}`
