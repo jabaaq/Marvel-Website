@@ -35,9 +35,25 @@ class CharList extends Component {
 
   renderItems(arr) {
     const items = arr.map((item) => {
+      const checkThumbnail =
+        item.thumbnail ==
+        "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
+      let imgStyle = { objectFit: "cover" };
+
+      checkThumbnail
+        ? (imgStyle = { objectFit: "unset" })
+        : (imgStyle = { objectFit: "cover" });
+
       return (
         <li className="char__item" key={item.id}>
-          <img src={item.thumbnail} alt={item.name} />
+          <img
+            src={item.thumbnail}
+            className={
+              checkThumbnail ? "randomchar__errorImg" : "randomchar__img"
+            }
+            alt={item.name}
+            style={imgStyle}
+          />
           <div className="char__name">{item.name}</div>
         </li>
       );
