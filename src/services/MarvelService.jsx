@@ -25,13 +25,14 @@ class MarvelService {
   getCharacter = async (id) => {
     const res = await this.getResource(
       `${this._apiBase}characters/${id}?${this._apiKey}`
-    ); //this is an asynchronous function. We have absolutely no idea how long the server will respond to us. in order for this variable to be formed we must take into account asynchrony
+    ); //this is an asynchronous function. We have absolutely no idea how long the server will respond to us. in order for this variable to be formed we must take into account asynchronys
     return this._transformCharacter(res.data.results[0]); //That's it, now when the method is launched it will wait for a response and the result will be written to the 'res' variable
   };
 
   _transformCharacter = (char) => {
     //Now the 'char' is res.data.results[0]
     return {
+      id: char.id,
       name: char.name,
       description:
         char.description.length !== 0
