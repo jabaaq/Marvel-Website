@@ -41,6 +41,7 @@ class MarvelService {
       thumbnail: char.thumbnail.path + "." + char.thumbnail.extension, //This is how we create a single path to our image
       homepage: char.urls[0].url, //here I get the first object and it has URL properties
       wiki: char.urls[1].url,
+      comics: char.comics.items,
     };
   };
 }
