@@ -9,6 +9,8 @@ class CharList extends Component {
     charList: [],
     error: false,
     loading: true,
+    newItemLoading: false,
+    offset: 210,
   };
 
   marvelService = new MarvelService();
@@ -17,12 +19,33 @@ class CharList extends Component {
     this.updateCharList();
   }
 
-  updateCharList = () => {
-    this.marvelService.getAllCharacters().then(this.onCharListLoaded).catch(this.onError);
+  onCharListLoading = () => {
+    this.setState({newItemLoading: true});
   };
 
-  onCharListLoaded = (charList) => {
-    this.setState({charList, loading: false});
+  onRequest = (offset) => {
+    this.onCharListLoading();
+    this.marvelService
+      .getAllCharacters(offset)
+      .then(this.onCharListLoaded)
+      .catch(this.onError);
+  };
+
+  updateCharList = () => {
+    this.marvelService
+      .getAllCharacters()
+      .then(this.onCharListLoaded)
+      .catch(this.onError);
+  };
+
+  onCharListLoaded = (newCharList) => {
+    this.setState(({offset, charList}) => ({
+      //this is the charList that was in the current state at the beginning, it is an empty array, then nine elements and so on
+      charList: [...charList, ...newCharList], //in this case charList is the old array and newCharlist is the new one
+      loading: false,
+      newItemLoading: false,
+      offset: offset + 9,
+    }));
   };
 
   onError = () => {
@@ -31,10 +54,14 @@ class CharList extends Component {
 
   renderItems(arr) {
     const items = arr.map((item) => {
-      const checkThumbnail = item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
+      const checkThumbnail =
+        item.thumbnail ===
+        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
       let imgStyle = {objectFit: 'cover'};
 
-      checkThumbnail ? (imgStyle = {objectFit: 'unset'}) : (imgStyle = {objectFit: 'cover'});
+      checkThumbnail
+        ? (imgStyle = {objectFit: 'unset'})
+        : (imgStyle = {objectFit: 'cover'});
 
       return (
         <li
@@ -53,7 +80,7 @@ class CharList extends Component {
   }
 
   render() {
-    const {charList, loading, error} = this.state;
+    const {charList, loading, error, offset, newItemLoading} = this.state;
     const eachItem = this.renderItems(charList);
 
     const errorMessage = error ? <ErrorMessage /> : null;
@@ -67,7 +94,10 @@ class CharList extends Component {
           {spinner}
           {content}
         </ul>
-        <button className="button button__main button__long">
+        <button
+          className="button button__main button__long"
+          disabled={newItemLoading}
+          onClick={() => this.onRequest(offset)}>
           <div className="inner">Load More</div>
         </button>
       </div>
