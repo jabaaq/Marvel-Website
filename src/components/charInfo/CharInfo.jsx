@@ -3,11 +3,12 @@ import "./charInfo.scss";
 import thor from "../../resources/img/thor.jpeg";
 import { Spinner } from "../spinner/Spinner";
 import { ErrorMessage } from "../errorMessage/ErrorMessage";
+import Skeleton from "../skeleton/Skeleton";
 import { MarvelService } from "../../services/MarvelService";
 
 class CharInfo extends Component {
   state = {
-    char: {},
+    char: null,
     loading: false,
     error: false,
   };
@@ -46,7 +47,20 @@ class CharInfo extends Component {
 
   render() {
     const { char, loading, error } = this.state;
-    return <div className="char__info"></div>;
+
+    const skeleton = char || loading || error ? null : <Skeleton />; //If any of this exists, then we don’t render anything.
+    const errorMessage = error ? <ErrorMessage /> : null;
+    const spinner = loading ? <Spinner /> : null;
+    const content = !(loading || error || !char) ? <View char={char} /> : null; //It says here that it is not loading, not an error, and there is already a character. so I wrote: !char
+
+    return (
+      <div className="char__info">
+        {skeleton}
+        {errorMessage}
+        {spinner}
+        {content}
+      </div>
+    );
   }
 }
 
