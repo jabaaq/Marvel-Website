@@ -1,5 +1,4 @@
 import "./charList.scss";
-import abyss from "../../resources/img/abyss.jpg";
 import { Spinner } from "../spinner/Spinner";
 import { ErrorMessage } from "../errorMessage/ErrorMessage";
 import { Component } from "react/cjs/react.production.min";
@@ -45,15 +44,14 @@ class CharList extends Component {
         : (imgStyle = { objectFit: "cover" });
 
       return (
-        <li className="char__item" key={item.id}>
-          <img
-            src={item.thumbnail}
-            className={
-              checkThumbnail ? "randomchar__errorImg" : "randomchar__img"
-            }
-            alt={item.name}
-            style={imgStyle}
-          />
+        <li
+          className="char__item"
+          key={item.id}
+          onClick={() => {
+            this.props.onCharSelected(item.id); //This ID will be passed to the App component
+          }}
+        >
+          <img src={item.thumbnail} alt={item.name} style={imgStyle} />
           <div className="char__name">{item.name}</div>
         </li>
       );
@@ -78,7 +76,7 @@ class CharList extends Component {
           {content}
         </ul>
         <button className="button button__main button__long">
-          <div className="inner">load more</div>
+          <div className="inner">Load More</div>
         </button>
       </div>
     );
