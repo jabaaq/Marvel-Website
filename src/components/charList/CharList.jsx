@@ -3,6 +3,7 @@ import {Spinner} from '../spinner/Spinner';
 import {ErrorMessage} from '../errorMessage/ErrorMessage';
 import {Component} from 'react/cjs/react.production.min';
 import {MarvelService} from '../../services/MarvelService';
+import PropTypes from 'prop-types';
 
 class CharList extends Component {
   state = {
@@ -10,7 +11,7 @@ class CharList extends Component {
     error: false,
     loading: true,
     newItemLoading: false,
-    offset: 9,
+    offset: 9, //Every time a request to the server is successfully completed, we must increase this number by 9 in our case
     charEnded: false,
   };
 
@@ -26,21 +27,15 @@ class CharList extends Component {
 
   onRequest = (offset) => {
     this.onCharListLoading();
-    this.marvelService
-      .getAllCharacters(offset)
-      .then(this.onCharListLoaded)
-      .catch(this.onError);
+    this.marvelService.getAllCharacters(offset).then(this.onCharListLoaded).catch(this.onError);
   };
 
   updateCharList = () => {
-    this.marvelService
-      .getAllCharacters()
-      .then(this.onCharListLoaded)
-      .catch(this.onError);
+    this.marvelService.getAllCharacters().then(this.onCharListLoaded).catch(this.onError);
   };
 
   onCharListLoaded = (newCharList) => {
-    let ended = false;
+    let ended = false; //here I check charList for an empty array or for the fact that it contains less than 9 elements.
     if (newCharList.length < 9) {
       ended = true;
     }
@@ -50,7 +45,7 @@ class CharList extends Component {
       loading: false,
       newItemLoading: false,
       offset: offset + 9,
-      charEnded: ended,
+      charEnded: ended, //calculate it and then put it in state
     }));
   };
 
@@ -60,14 +55,10 @@ class CharList extends Component {
 
   renderItems(arr) {
     const items = arr.map((item) => {
-      const checkThumbnail =
-        item.thumbnail ===
-        'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
+      const checkThumbnail = item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
       let imgStyle = {objectFit: 'cover'};
 
-      checkThumbnail
-        ? (imgStyle = {objectFit: 'unset'})
-        : (imgStyle = {objectFit: 'cover'});
+      checkThumbnail ? (imgStyle = {objectFit: 'unset'}) : (imgStyle = {objectFit: 'cover'});
 
       return (
         <li
@@ -86,8 +77,7 @@ class CharList extends Component {
   }
 
   render() {
-    const {charList, loading, error, offset, newItemLoading, charEnded} =
-      this.state;
+    const {charList, loading, error, offset, newItemLoading, charEnded} = this.state;
     const eachItem = this.renderItems(charList);
 
     const errorMessage = error ? <ErrorMessage /> : null;
@@ -112,5 +102,9 @@ class CharList extends Component {
     );
   }
 }
+
+CharList.propTypes = {
+  onCharSelected: PropTypes.func,
+};
 
 export default CharList;
