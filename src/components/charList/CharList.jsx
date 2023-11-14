@@ -49,12 +49,24 @@ class CharList extends Component {
     }));
   };
 
+  charsRefs = [];
+
+  setCharRef = (char) => {
+    this.charsRefs.push(char);
+  };
+
+  selectedChar = (id) => {
+    this.charsRefs.forEach((char) => char.classList.remove('char__item_selected'));
+    this.charsRefs[id].classList.add('char__item_selected');
+    this.charsRefs[id].focus();
+  };
+
   onError = () => {
     this.setState({loading: false, error: true});
   };
 
   renderItems(arr) {
-    const items = arr.map((item) => {
+    const items = arr.map((item, i) => {
       const checkThumbnail = item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg';
       let imgStyle = {objectFit: 'cover'};
 
@@ -64,8 +76,10 @@ class CharList extends Component {
         <li
           className="char__item"
           key={item.id}
+          ref={this.setCharRef}
           onClick={() => {
             this.props.onCharSelected(item.id); //This ID will be passed to the App component
+            this.selectedChar(i);
           }}>
           <img src={item.thumbnail} alt={item.name} style={imgStyle} />
           <div className="char__name">{item.name}</div>
