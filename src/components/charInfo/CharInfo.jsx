@@ -1,4 +1,3 @@
-import {Component} from 'react/cjs/react.production.min';
 import './charInfo.scss';
 import {Spinner} from '../spinner/Spinner';
 import {ErrorMessage} from '../errorMessage/ErrorMessage';
@@ -21,12 +20,6 @@ const CharInfo = (props) => {
   useEffect(() => {
     updateChar();
   }, [props.charId]);
-
-  // componentDidUpdate(prevProps) {
-  //   if (this.props.charId !== prevProps.charId) {
-  //     this.updateChar();
-  //   }
-  // }
 
   const updateChar = () => {
     const {charId} = props;
