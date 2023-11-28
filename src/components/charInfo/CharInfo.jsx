@@ -9,7 +9,7 @@ import {useEffect, useState} from 'react';
 const CharInfo = (props) => {
   const [char, setChar] = useState(null);
 
-  const {error, loading, getCharacter} = useMarvelService();
+  const {error, loading, getCharacter, clearError} = useMarvelService();
 
   useEffect(() => {
     updateChar();
@@ -25,6 +25,7 @@ const CharInfo = (props) => {
     if (!charId) {
       return;
     }
+    clearError(); //and here, before making a request to the server, we also call Clear
     getCharacter(charId).then(onCharLoaded); //when a response arrives from the service in the format of one object with a character, it will be taken as a char argument and written to state
   };
 
