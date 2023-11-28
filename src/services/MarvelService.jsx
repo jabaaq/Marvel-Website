@@ -10,31 +10,38 @@ const useMarvelService = () => {
 
   const getAllCharacters = async (offset = _baseOffset) => {
     //this will allow the function to be more flexible because now it will start from the argument. And if we don’t pass this argument there, then the base offset will be used: _baseOffset = 210;
-    try {
-      const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`);
-      if (!res || !res.data || !res.data.results) {
-        throw new Error('Invalid response structure');
-      }
-      return res.data.results.map(_transformCharacter);
-    } catch (error) {
-      console.error('Error in getAllCharacters:', error);
-      return null;
-    }
+
+    const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`);
+
+    return res.data.results.map(_transformCharacter);
   };
 
   const getCharacter = async (id) => {
-    try {
-      const res = await request(`${_apiBase}characters/${id}?${_apiKey}`);
-      if (!res || !res.data || !res.data.results) {
-        throw new Error('Invalid response structure');
-      }
-      return _transformCharacter(res.data.results[0]);
-    } catch (error) {
-      console.error('Error in getAllCharacters:', error);
-      return [];
-    }
-
+    const res = await request(`${_apiBase}characters/${id}?${_apiKey}`);
+    return _transformCharacter(res.data.results[0]);
     //That's it, now when the method is launched it will wait for a response and the result will be written to the 'res' variable
+  };
+
+  const getAllComics = async (offset = 0) => {
+    const res = await request(`${_apiBase}comics?orderBy=issueNumber&limit=8&offset=${offset}&${_apiKey}`);
+    return res.data.results.map(_transformComics);
+  };
+
+  const getComics = async (id) => {
+    const res = await request(`${_apiBase}comics/${id}?${_apiKey}`);
+    return _transformComics(res.data.results[0]);
+  };
+
+  const _transformComics = (comics) => {
+    return {
+      id: comics.id,
+      title: comics.title,
+      description: comics.description || 'There is no description',
+      pageCount: comics.pageCount ? `${comics.pageCount} p.` : 'There is no information about the number of pages',
+      thumbnail: comics.thumbnail.path + '.' + comics.thumbnail.extension,
+      language: comics.textObjects.language,
+      prices: comics.prices[0].price ? `${comics.prices[0].price + '$'}` : 'NOT AVAILABLE',
+    };
   };
 
   const _transformCharacter = (char) => {
@@ -52,13 +59,7 @@ const useMarvelService = () => {
 
   /*since this function (made a custom hook from the class component) we can return something from it since this is such a custom hook also in order to use the service. */
 
-  return {
-    loading,
-    error,
-    clearError,
-    getAllCharacters,
-    getCharacter,
-  };
+  return {loading, error, clearError, getAllCharacters, getCharacter, getAllComics, getComics, _transformComics};
 };
 
 export {useMarvelService};
