@@ -2,16 +2,14 @@ import './charInfo.scss';
 import {Spinner} from '../spinner/Spinner';
 import {ErrorMessage} from '../errorMessage/ErrorMessage';
 import Skeleton from '../skeleton/Skeleton';
-import {MarvelService} from '../../services/MarvelService';
+import {useMarvelService} from '../../services/MarvelService';
 import PropTypes from 'prop-types';
 import {useEffect, useState} from 'react';
 
 const CharInfo = (props) => {
   const [char, setChar] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
 
-  const marvelService = new MarvelService();
+  const {error, loading, getCharacter} = useMarvelService();
 
   useEffect(() => {
     updateChar();
@@ -27,26 +25,11 @@ const CharInfo = (props) => {
     if (!charId) {
       return;
     }
-
-    onCharLoading(); //so that before the request we will show a spinner
-    marvelService //and if there is already an ID, then I make a request to the server
-      .getCharacter(charId)
-      .then(onCharLoaded) //when a response arrives from the service in the format of one object with a character, it will be taken as a char argument and written to state
-      .catch(onError);
+    getCharacter(charId).then(onCharLoaded); //when a response arrives from the service in the format of one object with a character, it will be taken as a char argument and written to state
   };
 
   const onCharLoaded = (char) => {
     setChar(char);
-    setLoading(false);
-  };
-
-  const onCharLoading = () => {
-    setLoading(true);
-  };
-
-  const onError = () => {
-    setLoading(false);
-    setError(true);
   };
 
   const skeleton = char || loading || error ? null : <Skeleton />; //If any of this exists, then we don’t render anything.

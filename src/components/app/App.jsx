@@ -25,7 +25,6 @@ const App = () => {
             <CharList onCharSelected={onCharSelected} />
           </ErrorBoundary>
           <ErrorBoundary>
-            {/* call ErrorBoundary, open it and place our problematic component inside */}
             <CharInfo charId={selectedChar} />
           </ErrorBoundary>
         </div>
