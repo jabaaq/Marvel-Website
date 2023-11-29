@@ -34,8 +34,6 @@ const CharList = (props) => {
     setCharEnded((charEnded) => ended);
   };
 
-  console.log('Render!');
-
   const charsRefs = useRef([]);
 
   const selectedChar = (id) => {
