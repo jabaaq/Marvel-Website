@@ -1,21 +1,22 @@
+import {Link} from 'react-router-dom';
 import './appHeader.scss';
 
 const AppHeader = () => {
   return (
     <header className="app__header">
       <h1 className="app__title">
-        <a href="#">
+        <Link to="/">
           <span>Marvel</span> Information Portal
-        </a>
+        </Link>
       </h1>
       <nav className="app__menu">
         <ul>
           <li>
-            <a href="#">Characters</a>
+            <Link to="/">Characters</Link>
           </li>
           /
           <li>
-            <a href="#">Comics</a>
+            <Link to="/comics">Comics</Link>
           </li>
         </ul>
       </nav>
