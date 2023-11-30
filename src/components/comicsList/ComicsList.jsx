@@ -1,9 +1,6 @@
 import './comicsList.scss';
-import uw from '../../resources/img/UW.png';
-import xMen from '../../resources/img/x-men.png';
 import {useState, useEffect, useRef} from 'react';
 import {useMarvelService} from '../../services/MarvelService';
-import {ErrorMessage} from '../errorMessage/ErrorMessage';
 import {Spinner} from '../spinner/Spinner';
 
 const ComicsList = () => {
