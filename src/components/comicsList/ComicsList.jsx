@@ -1,5 +1,6 @@
 import './comicsList.scss';
 import {useState, useEffect, useRef} from 'react';
+import {Link} from 'react-router-dom';
 import {useMarvelService} from '../../services/MarvelService';
 import {Spinner} from '../spinner/Spinner';
 
@@ -32,21 +33,16 @@ const ComicsList = () => {
     setComicsEnded((comicsEnded) => ended);
   };
 
-  const comicsRefs = useRef([]);
-
-  const selectedChar = (id) => {
-    comicsRefs.current.forEach((comics) => comics.classList.remove('char__item_selected'));
-    comicsRefs.current[id].classList.add('char__item_selected');
-    comicsRefs.current[id].focus();
-  };
-
   function renderItems(arr) {
     const items = arr.map((item, i) => {
       return (
-        <li className="comics__item" key={item.id} ref={(el) => (comicsRefs.current[i] = el)}>
-          <img src={item.thumbnail} alt={item.title} className="comics__item-img" />
-          <div className="comics__item-name">{item.title}</div>
-          <div className="comics__item-price">{item.prices}</div>
+        <li className="comics__item" key={i}>
+          <Link to={`/comics/${item.id}`}>
+            {/*Next you need to specify which comic will open*/}
+            <img src={item.thumbnail} alt={item.title} className="comics__item-img" />
+            <div className="comics__item-name">{item.title}</div>
+            <div className="comics__item-price">{item.prices}</div>
+          </Link>
         </li>
       );
     });
