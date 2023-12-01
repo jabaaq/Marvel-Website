@@ -18,7 +18,8 @@ const AppHeader = () => {
           </li>
           /
           <li>
-            <NavLink end style={({isActive}) => ({color: isActive ? '#9F0013' : 'inherit'})} to="/comics">
+            <NavLink style={({isActive}) => ({color: isActive ? '#9F0013' : 'inherit'})} to="/comics">
+              {/* here I removed the 'end' so that all links that contained '/comics' would also be colored in this color */}
               Comics
             </NavLink>
           </li>
