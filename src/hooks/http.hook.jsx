@@ -8,7 +8,7 @@ const useHttp = () => {
     async (url, method = 'GET', body = null, headers = {'Content-Type': 'application/json'}) => {
       setLoading(true);
 
-      /*need to think about how to throw an error because this method will only send the request to the server but will not process it using .then / .Catch or dot .finally */
+      /*need to think about how to throw an error because this method will only send the request to the server but will not process it using .then / .Catch or .finally */
 
       try {
         const response = await fetch(url, {method, body, headers}); //sent a request and the answer will be placed in response
